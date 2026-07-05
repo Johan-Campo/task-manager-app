@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "PowerShell(pip install playwright -q)",
+      "PowerShell(python -m playwright install chromium 2>&1)"
+    ]
+  }
+}
