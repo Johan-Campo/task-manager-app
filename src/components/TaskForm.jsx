@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { X, User, Tag, Flag, AlignLeft, CheckCircle } from 'lucide-react'
+
 import useTaskStore from '../store/useTaskStore.js'
 import { PRIORITIES, STATUSES } from '../types.js'
 import { cn } from '../lib/cn.js'

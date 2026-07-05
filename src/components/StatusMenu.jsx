@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Check, ChevronDown } from 'lucide-react'
+
 import { STATUSES, STATUS_DOT_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
 

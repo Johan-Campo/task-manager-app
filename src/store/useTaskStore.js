@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useShallow } from 'zustand/react/shallow'
+
 import { seedTasks } from '../data/seedTasks.js'
 
 const useTaskStore = create(

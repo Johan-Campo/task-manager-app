@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Inbox } from 'lucide-react'
+
 import useTaskStore, { useShallow } from '../store/useTaskStore.js'
 import { TaskCard } from './TaskCard.jsx'
 import { TaskFilters } from './TaskFilters.jsx'

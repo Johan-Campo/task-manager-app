@@ -66,3 +66,9 @@ export const STATUS_DOT_COLORS = {
   [STATUS.QA]: '#f97316',
   [STATUS.ENTREGADO]: '#34d399',
 }
+
+export const PRIORITY_CHART_COLORS = {
+  [PRIORITY.ALTA]: '#f43f5e',
+  [PRIORITY.MEDIA]: '#f59e0b',
+  [PRIORITY.BAJA]: '#0ea5e9',
+}

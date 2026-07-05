@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { User, Calendar, Trash2 } from 'lucide-react'
+
 import useTaskStore from '../store/useTaskStore.js'
 import { PRIORITY_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'

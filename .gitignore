@@ -46,7 +46,9 @@ desktop.ini
 
 # PDF files (briefs, docs)
 *.pdf
+# Interview guide (personal use)
+public/guion-entrevista.html
 
-# Claude Code / gentle-ai tooling
+# Claude Code
 .claude/
 .atl/

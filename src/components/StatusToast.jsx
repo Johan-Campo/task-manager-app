@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, X, ArrowRight } from 'lucide-react'
+
 import useTaskStore, { useShallow } from '../store/useTaskStore.js'
 
 export function StatusToast() {

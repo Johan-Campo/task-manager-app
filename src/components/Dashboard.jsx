@@ -1,10 +1,11 @@
 import { LayoutGrid, AlertOctagon, Zap, CheckCircle2, AlertTriangle } from 'lucide-react'
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Legend,
 } from 'recharts'
+
 import useTaskStore from '../store/useTaskStore.js'
-import { PRIORITY, STATUS, STATUSES, PRIORITIES } from '../types.js'
+import { PRIORITY, STATUS, STATUSES, PRIORITIES, STATUS_DOT_COLORS, PRIORITY_CHART_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
 import { KanbanBoard } from './KanbanBoard.jsx'
 
@@ -35,18 +36,9 @@ const STAT_CARDS = [
   },
 ]
 
-const STATUS_CHART_COLORS = {
-  Prospeccion: '#94a3b8',
-  Propuesta: '#60a5fa',
-  'En desarrollo': '#8b5cf6',
-  QA: '#f97316',
-  Entregado: '#34d399',
-}
-
-const PRIORITY_CHART_COLORS = {
-  Alta: '#f43f5e',
-  Media: '#f59e0b',
-  Baja: '#0ea5e9',
+const CHART_TOKENS = {
+  text: 'var(--color-slate-500)',
+  cursorFill: 'rgba(139,92,246,0.05)',
 }
 
 function ChartTooltip({ active, payload, label }) {
@@ -70,11 +62,13 @@ export function Dashboard() {
   const statusChartData = STATUSES.map((s) => ({
     name: s,
     count: tasks.filter((t) => t.estado === s).length,
+    fill: STATUS_DOT_COLORS[s],
   }))
 
   const priorityChartData = PRIORITIES.map((p) => ({
     name: p,
     value: tasks.filter((t) => t.prioridad === p).length,
+    fill: PRIORITY_CHART_COLORS[p],
   })).filter((d) => d.value > 0)
 
   return (
@@ -136,16 +130,12 @@ export function Dashboard() {
                   type="category"
                   dataKey="name"
                   width={100}
-                  tick={{ fontSize: 11, fontWeight: 600, fill: '#64748b' }}
+                  tick={{ fontSize: 11, fontWeight: 600, fill: CHART_TOKENS.text }}
                   axisLine={false}
                   tickLine={false}
                 />
-                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(139,92,246,0.05)', radius: 6 }} />
-                <Bar dataKey="count" radius={[0, 6, 6, 0]} maxBarSize={18} animationDuration={900} animationEasing="ease-out">
-                  {statusChartData.map((entry) => (
-                    <Cell key={entry.name} fill={STATUS_CHART_COLORS[entry.name]} />
-                  ))}
-                </Bar>
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: CHART_TOKENS.cursorFill, radius: 6 }} />
+                <Bar dataKey="count" radius={[0, 6, 6, 0]} maxBarSize={18} animationDuration={900} animationEasing="ease-out" />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -170,17 +160,13 @@ export function Dashboard() {
                   dataKey="value"
                   animationBegin={0}
                   animationDuration={900}
-                >
-                  {priorityChartData.map((entry) => (
-                    <Cell key={entry.name} fill={PRIORITY_CHART_COLORS[entry.name]} />
-                  ))}
-                </Pie>
+                />
                 <Tooltip content={<ChartTooltip />} />
                 <Legend
                   iconType="circle"
                   iconSize={8}
                   formatter={(value) => (
-                    <span style={{ fontSize: 11, fontWeight: 600, color: '#64748b' }}>{value}</span>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: CHART_TOKENS.text }}>{value}</span>
                   )}
                 />
               </PieChart>

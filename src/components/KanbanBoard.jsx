@@ -10,6 +10,7 @@ import {
   useDraggable,
 } from '@dnd-kit/core'
 import { GripVertical } from 'lucide-react'
+
 import useTaskStore from '../store/useTaskStore.js'
 import { STATUSES, PRIORITY_COLORS, PRIORITY_BORDER, KANBAN_BORDER_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
@@ -76,9 +77,8 @@ function KanbanCardOverlay({ task }) {
   )
 }
 
-function KanbanColumn({ status, tasks, total }) {
+function KanbanColumn({ status, tasks }) {
   const { setNodeRef, isOver } = useDroppable({ id: status })
-  const pct = total > 0 ? Math.round((tasks.length / total) * 100) : 0
 
   return (
     <div
@@ -89,18 +89,11 @@ function KanbanColumn({ status, tasks, total }) {
         isOver ? 'bg-violet-50/50 border-violet-200 shadow-md' : 'bg-white border-slate-200/80'
       )}
     >
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-3">
         <span className="text-xs font-bold text-slate-700">{status}</span>
         <span className="min-w-5 h-5 px-1.5 bg-slate-100 rounded-full text-[11px] font-bold text-slate-500 flex items-center justify-center">
           {tasks.length}
         </span>
-      </div>
-
-      <div className="h-[3px] rounded-full bg-slate-100 mb-3 overflow-hidden">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-600 transition-all duration-300"
-          style={{ width: `${pct}%` }}
-        />
       </div>
 
       <div className="space-y-2">
@@ -166,7 +159,6 @@ export function KanbanBoard() {
               key={status}
               status={status}
               tasks={tasks.filter((t) => t.estado === status)}
-              total={tasks.length}
             />
           ))}
         </div>
