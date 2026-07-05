@@ -43,3 +43,10 @@ desktop.ini
 # Cache
 .eslintcache
 .cache/
+
+# PDF files (briefs, docs)
+*.pdf
+
+# Claude Code / gentle-ai tooling
+.claude/
+.atl/
