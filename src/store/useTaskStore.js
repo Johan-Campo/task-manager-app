@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useShallow } from 'zustand/react/shallow'
+import { seedTasks } from '../data/seedTasks.js'
 
 const useTaskStore = create(
   persist(
@@ -38,7 +39,14 @@ const useTaskStore = create(
 
       clearLastStatusChange: () => set({ lastStatusChange: null }),
     }),
-    { name: 'task-manager-storage' }
+    {
+      name: 'task-manager-storage',
+      onRehydrateStorage: () => (state) => {
+        if (state && state.tasks.length === 0) {
+          state.tasks = seedTasks
+        }
+      },
+    }
   )
 )
 
