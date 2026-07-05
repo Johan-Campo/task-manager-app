@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Layers, ListTodo, LayoutDashboard } from 'lucide-react'
+import { ListTodo, LayoutDashboard } from 'lucide-react'
 import { TaskList } from './components/TaskList.jsx'
 import { Dashboard } from './components/Dashboard.jsx'
 import { StatusToast } from './components/StatusToast.jsx'
@@ -19,7 +19,11 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 bg-gradient-to-br from-violet-600 to-purple-700 rounded-xl flex items-center justify-center shadow-lg shadow-violet-200">
-              <Layers size={17} className="text-white" />
+              <svg width="17" height="17" viewBox="0 0 72 72" fill="none">
+                <rect x="20" y="24" width="24" height="6" rx="3" fill="white" opacity="0.55" />
+                <rect x="20" y="34" width="32" height="6" rx="3" fill="white" opacity="0.8" />
+                <path d="M20 46L27 53L52 30" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              </svg>
             </div>
             <span className="font-display font-bold text-slate-900 text-[18px] tracking-tight">TaskFlow</span>
           </div>
