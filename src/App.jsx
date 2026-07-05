@@ -14,17 +14,17 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('tasks')
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
-      <header className="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50/40 font-sans">
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-sm shadow-indigo-200">
+            <div className="w-9 h-9 bg-gradient-to-br from-violet-600 to-purple-700 rounded-xl flex items-center justify-center shadow-lg shadow-violet-200">
               <Layers size={17} className="text-white" />
             </div>
             <span className="font-display font-bold text-slate-900 text-[18px] tracking-tight">TaskFlow</span>
           </div>
 
-          <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+          <nav className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/60">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
@@ -32,8 +32,8 @@ export default function App() {
                 className={cn(
                   'flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-150',
                   activeTab === id
-                    ? 'bg-white text-indigo-700 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                    ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-sm shadow-violet-300'
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-white/70'
                 )}
               >
                 <Icon size={14} />

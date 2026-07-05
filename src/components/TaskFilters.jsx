@@ -19,7 +19,7 @@ export function TaskFilters() {
       <select
         value={filters.status ?? ''}
         onChange={(e) => setFilter('status', e.target.value || null)}
-        className="text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 text-slate-600 cursor-pointer shadow-sm transition-all"
+        className="text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 text-slate-600 cursor-pointer shadow-sm transition-all"
       >
         <option value="">Todos los estados</option>
         {STATUSES.map((s) => (
@@ -30,7 +30,7 @@ export function TaskFilters() {
       <select
         value={filters.priority ?? ''}
         onChange={(e) => setFilter('priority', e.target.value || null)}
-        className="text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 text-slate-600 cursor-pointer shadow-sm transition-all"
+        className="text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 text-slate-600 cursor-pointer shadow-sm transition-all"
       >
         <option value="">Todas las prioridades</option>
         {PRIORITIES.map((p) => (
@@ -41,7 +41,7 @@ export function TaskFilters() {
       {hasFilter && (
         <button
           onClick={() => { setFilter('status', null); setFilter('priority', null) }}
-          className="flex items-center gap-1 text-xs font-semibold text-red-500 hover:text-red-700 hover:bg-red-50 px-2.5 py-1.5 rounded-xl transition-colors"
+          className="flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-700 hover:bg-rose-50 px-2.5 py-1.5 rounded-xl transition-colors"
         >
           <X size={12} />
           Limpiar

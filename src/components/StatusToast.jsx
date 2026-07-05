@@ -19,8 +19,8 @@ export function StatusToast() {
   if (!lastStatusChange) return null
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl px-4 py-3.5 shadow-2xl border border-slate-700/60 max-w-sm">
-      <div className="w-8 h-8 bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
+    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl px-4 py-3.5 shadow-2xl border border-white/10 max-w-sm">
+      <div className="w-8 h-8 bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 rounded-xl flex items-center justify-center shrink-0">
         <CheckCircle2 size={16} className="text-emerald-400" />
       </div>
 
@@ -35,7 +35,7 @@ export function StatusToast() {
 
       <button
         onClick={clearLastStatusChange}
-        className="text-slate-500 hover:text-white hover:bg-slate-700 p-1 rounded-lg transition-colors shrink-0"
+        className="text-slate-500 hover:text-white hover:bg-white/10 p-1 rounded-lg transition-colors shrink-0"
       >
         <X size={14} />
       </button>

@@ -50,7 +50,9 @@ export function TaskForm({ onClose }) {
       className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
       onKeyDown={(e) => e.key === 'Escape' && onClose()}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-slate-100">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-slate-100 overflow-hidden">
+        <div className="h-1 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500" />
+
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100">
           <div>
             <h2 className="font-display font-bold text-slate-900 text-base">Nueva tarea</h2>
@@ -75,7 +77,7 @@ export function TaskForm({ onClose }) {
                 'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-all bg-slate-50 focus:bg-white',
                 errors.nombre
                   ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-50'
-                  : 'border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50'
+                  : 'border-slate-200 focus:border-violet-400 focus:ring-2 focus:ring-violet-50'
               )}
             />
           </Field>
@@ -90,7 +92,7 @@ export function TaskForm({ onClose }) {
                 'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-all bg-slate-50 focus:bg-white',
                 errors.owner
                   ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-50'
-                  : 'border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50'
+                  : 'border-slate-200 focus:border-violet-400 focus:ring-2 focus:ring-violet-50'
               )}
             />
           </Field>
@@ -101,7 +103,7 @@ export function TaskForm({ onClose }) {
                 name="prioridad"
                 value={form.prioridad}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 bg-slate-50 focus:bg-white transition-all cursor-pointer"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 bg-slate-50 focus:bg-white transition-all cursor-pointer"
               >
                 {PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
@@ -112,7 +114,7 @@ export function TaskForm({ onClose }) {
                 name="estado"
                 value={form.estado}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 bg-slate-50 focus:bg-white transition-all cursor-pointer"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 bg-slate-50 focus:bg-white transition-all cursor-pointer"
               >
                 {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -126,7 +128,7 @@ export function TaskForm({ onClose }) {
               onChange={handleChange}
               rows={3}
               placeholder="Detalle de la tarea..."
-              className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 bg-slate-50 focus:bg-white transition-all resize-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 bg-slate-50 focus:bg-white transition-all resize-none"
             />
           </Field>
 
@@ -140,7 +142,7 @@ export function TaskForm({ onClose }) {
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-xl shadow-sm shadow-indigo-200 transition-all"
+              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white text-sm font-semibold rounded-xl shadow-sm shadow-violet-200 transition-all"
             >
               <CheckCircle size={14} />
               Crear tarea

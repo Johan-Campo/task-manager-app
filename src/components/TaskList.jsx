@@ -23,7 +23,7 @@ export function TaskList() {
         <TaskFilters />
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-xl shadow-sm shadow-indigo-200 transition-all duration-150"
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 text-white text-sm font-semibold rounded-xl shadow-md shadow-violet-200 transition-all duration-150"
         >
           <Plus size={16} strokeWidth={2.5} />
           Nueva tarea
@@ -32,7 +32,7 @@ export function TaskList() {
 
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center">
             <Inbox size={28} className="text-slate-400" />
           </div>
           <div className="text-center">
@@ -40,7 +40,9 @@ export function TaskList() {
               {tasks.length === 0 ? 'No hay tareas aún' : 'Sin resultados'}
             </p>
             <p className="text-xs text-slate-400 mt-1">
-              {tasks.length === 0 ? 'Crea la primera tarea con el botón de arriba' : 'Ninguna tarea coincide con los filtros seleccionados'}
+              {tasks.length === 0
+                ? 'Crea la primera tarea con el botón de arriba'
+                : 'Ninguna tarea coincide con los filtros seleccionados'}
             </p>
           </div>
         </div>
