@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X, User, Tag, Flag, AlignLeft, CheckCircle } from 'lucide-react'
 import useTaskStore from '../store/useTaskStore.js'
 import { PRIORITIES, STATUSES } from '../types.js'
 import { cn } from '../lib/cn.js'
@@ -32,10 +33,7 @@ export function TaskForm({ onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     const next = validate()
-    if (Object.keys(next).length > 0) {
-      setErrors(next)
-      return
-    }
+    if (Object.keys(next).length > 0) { setErrors(next); return }
     addTask({
       id: crypto.randomUUID(),
       ...form,
@@ -48,58 +46,64 @@ export function TaskForm({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-800">Nueva tarea</h2>
+    <div
+      className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      onKeyDown={(e) => e.key === 'Escape' && onClose()}
+    >
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-slate-100">
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100">
+          <div>
+            <h2 className="font-display font-bold text-slate-900 text-base">Nueva tarea</h2>
+            <p className="text-xs text-slate-400 mt-0.5">Completa los campos para crear una tarea</p>
+          </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors text-xl leading-none"
+            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors"
           >
-            ×
+            <X size={16} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-          <Field label="Nombre" error={errors.nombre}>
+          <Field label="Nombre de la tarea" icon={<Tag size={12} />} error={errors.nombre}>
             <input
               name="nombre"
               value={form.nombre}
               onChange={handleChange}
               placeholder="Ej: Enviar propuesta comercial"
               className={cn(
-                'w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors',
-                'border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100',
-                errors.nombre && 'border-red-400'
+                'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-all bg-slate-50 focus:bg-white',
+                errors.nombre
+                  ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-50'
+                  : 'border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50'
               )}
             />
           </Field>
 
-          <Field label="Responsable" error={errors.owner}>
+          <Field label="Responsable" icon={<User size={12} />} error={errors.owner}>
             <input
               name="owner"
               value={form.owner}
               onChange={handleChange}
-              placeholder="Ej: Johan Perez"
+              placeholder="Ej: Johan Campo"
               className={cn(
-                'w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors',
-                'border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100',
-                errors.owner && 'border-red-400'
+                'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-all bg-slate-50 focus:bg-white',
+                errors.owner
+                  ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-50'
+                  : 'border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50'
               )}
             />
           </Field>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Prioridad">
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Prioridad" icon={<Flag size={12} />}>
               <select
                 name="prioridad"
                 value={form.prioridad}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 bg-slate-50 focus:bg-white transition-all cursor-pointer"
               >
-                {PRIORITIES.map((p) => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
+                {PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </Field>
 
@@ -108,38 +112,37 @@ export function TaskForm({ onClose }) {
                 name="estado"
                 value={form.estado}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 bg-slate-50 focus:bg-white transition-all cursor-pointer"
               >
-                {STATUSES.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
+                {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </Field>
           </div>
 
-          <Field label="Descripción">
+          <Field label="Descripción" icon={<AlignLeft size={12} />}>
             <textarea
               name="descripcion"
               value={form.descripcion}
               onChange={handleChange}
               rows={3}
               placeholder="Detalle de la tarea..."
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 resize-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 bg-slate-50 focus:bg-white transition-all resize-none"
             />
           </Field>
 
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-2 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-xl shadow-sm shadow-indigo-200 transition-all"
             >
+              <CheckCircle size={14} />
               Crear tarea
             </button>
           </div>
@@ -149,10 +152,13 @@ export function TaskForm({ onClose }) {
   )
 }
 
-function Field({ label, error, children }) {
+function Field({ label, icon, error, children }) {
   return (
-    <div className="space-y-1">
-      <label className="block text-sm font-medium text-slate-700">{label}</label>
+    <div className="space-y-1.5">
+      <label className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+        {icon && <span className="text-slate-400">{icon}</span>}
+        {label}
+      </label>
       {children}
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>

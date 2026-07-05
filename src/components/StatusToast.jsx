@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { CheckCircle2, X, ArrowRight } from 'lucide-react'
 import useTaskStore, { useShallow } from '../store/useTaskStore.js'
 
 export function StatusToast() {
@@ -11,26 +12,32 @@ export function StatusToast() {
 
   useEffect(() => {
     if (!lastStatusChange) return
-    const timer = setTimeout(clearLastStatusChange, 4000)
+    const timer = setTimeout(clearLastStatusChange, 4500)
     return () => clearTimeout(timer)
   }, [lastStatusChange, clearLastStatusChange])
 
   if (!lastStatusChange) return null
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 bg-slate-800 text-white text-sm rounded-xl px-5 py-3 shadow-xl flex items-start gap-3 max-w-sm animate-in">
-      <span className="text-green-400 text-base shrink-0">✓</span>
-      <div>
-        <p className="font-medium leading-snug">{lastStatusChange.taskName}</p>
-        <p className="text-slate-300 text-xs mt-0.5">
-          {lastStatusChange.previousStatus} → <strong className="text-white">{lastStatusChange.newStatus}</strong>
-        </p>
+    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl px-4 py-3.5 shadow-2xl border border-slate-700/60 max-w-sm">
+      <div className="w-8 h-8 bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
+        <CheckCircle2 size={16} className="text-emerald-400" />
       </div>
+
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold leading-tight truncate">{lastStatusChange.taskName}</p>
+        <div className="flex items-center gap-1.5 mt-0.5">
+          <span className="text-xs text-slate-400">{lastStatusChange.previousStatus}</span>
+          <ArrowRight size={10} className="text-slate-500 shrink-0" />
+          <span className="text-xs font-semibold text-emerald-400">{lastStatusChange.newStatus}</span>
+        </div>
+      </div>
+
       <button
         onClick={clearLastStatusChange}
-        className="ml-auto text-slate-400 hover:text-white transition-colors shrink-0"
+        className="text-slate-500 hover:text-white hover:bg-slate-700 p-1 rounded-lg transition-colors shrink-0"
       >
-        ×
+        <X size={14} />
       </button>
     </div>
   )

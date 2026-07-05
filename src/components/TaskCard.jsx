@@ -1,6 +1,13 @@
+import { User, Calendar, Trash2 } from 'lucide-react'
 import useTaskStore from '../store/useTaskStore.js'
 import { STATUSES, STATUS_COLORS, PRIORITY_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
+
+const PRIORITY_BORDER = {
+  Alta: 'border-l-red-500',
+  Media: 'border-l-amber-400',
+  Baja: 'border-l-slate-300',
+}
 
 export function TaskCard({ task }) {
   const updateStatus = useTaskStore((s) => s.updateStatus)
@@ -13,37 +20,46 @@ export function TaskCard({ task }) {
   })
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3 hover:shadow-md transition-shadow">
+    <div
+      className={cn(
+        'group bg-white rounded-2xl border border-slate-200 border-l-4 p-4 flex flex-col gap-3',
+        'shadow-sm hover:shadow-md transition-all duration-200',
+        PRIORITY_BORDER[task.prioridad]
+      )}
+    >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-semibold text-slate-800 leading-snug">{task.nombre}</h3>
         <button
           onClick={() => deleteTask(task.id)}
-          className="text-slate-300 hover:text-red-400 transition-colors shrink-0 text-lg leading-none"
+          className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-400 hover:bg-red-50 p-1 rounded-lg transition-all shrink-0"
         >
-          ×
+          <Trash2 size={13} />
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <span className={cn('text-xs font-medium px-2 py-0.5 rounded-full', PRIORITY_COLORS[task.prioridad])}>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className={cn('text-xs font-semibold px-2 py-0.5 rounded-md', PRIORITY_COLORS[task.prioridad])}>
           {task.prioridad}
         </span>
-        <span className="text-xs text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full">
+        <span className="flex items-center gap-1 text-xs text-slate-500">
+          <User size={11} className="text-slate-400" />
           {task.owner}
         </span>
       </div>
 
       {task.descripcion && (
-        <p className="text-xs text-slate-500 line-clamp-2">{task.descripcion}</p>
+        <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">{task.descripcion}</p>
       )}
 
-      <div className="pt-1 border-t border-slate-100">
-        <label className="block text-xs text-slate-400 mb-1">Estado</label>
+      <div className="mt-auto pt-3 border-t border-slate-100">
+        <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+          Estado
+        </label>
         <select
           value={task.estado}
           onChange={(e) => updateStatus(task.id, e.target.value)}
           className={cn(
-            'w-full text-xs font-medium rounded-lg px-2 py-1.5 border-0 outline-none cursor-pointer',
+            'w-full text-xs font-semibold rounded-xl px-2.5 py-1.5 border-0 outline-none cursor-pointer transition-colors',
             STATUS_COLORS[task.estado]
           )}
         >
@@ -53,7 +69,10 @@ export function TaskCard({ task }) {
         </select>
       </div>
 
-      <p className="text-xs text-slate-400">Actualizado: {formattedDate}</p>
+      <div className="flex items-center gap-1 text-[11px] text-slate-400">
+        <Calendar size={11} />
+        {formattedDate}
+      </div>
     </div>
   )
 }

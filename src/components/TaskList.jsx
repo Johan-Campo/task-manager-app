@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Plus, Inbox } from 'lucide-react'
 import useTaskStore, { useShallow } from '../store/useTaskStore.js'
 import { TaskCard } from './TaskCard.jsx'
 import { TaskFilters } from './TaskFilters.jsx'
@@ -22,19 +23,26 @@ export function TaskList() {
         <TaskFilters />
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-xl shadow-sm shadow-indigo-200 transition-all duration-150"
         >
-          <span className="text-base leading-none">+</span>
+          <Plus size={16} strokeWidth={2.5} />
           Nueva tarea
         </button>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-          <p className="text-4xl mb-3">📋</p>
-          <p className="text-sm">
-            {tasks.length === 0 ? 'No hay tareas aún. ¡Crea la primera!' : 'Ninguna tarea coincide con los filtros.'}
-          </p>
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center">
+            <Inbox size={28} className="text-slate-400" />
+          </div>
+          <div className="text-center">
+            <p className="text-sm font-semibold text-slate-600">
+              {tasks.length === 0 ? 'No hay tareas aún' : 'Sin resultados'}
+            </p>
+            <p className="text-xs text-slate-400 mt-1">
+              {tasks.length === 0 ? 'Crea la primera tarea con el botón de arriba' : 'Ninguna tarea coincide con los filtros seleccionados'}
+            </p>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

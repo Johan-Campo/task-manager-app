@@ -1,42 +1,50 @@
 import { useState } from 'react'
+import { Layers, ListTodo, LayoutDashboard } from 'lucide-react'
 import { TaskList } from './components/TaskList.jsx'
 import { Dashboard } from './components/Dashboard.jsx'
 import { StatusToast } from './components/StatusToast.jsx'
 import { cn } from './lib/cn.js'
 
 const TABS = [
-  { id: 'tasks', label: 'Tareas' },
-  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'tasks', label: 'Tareas', icon: ListTodo },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ]
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('tasks')
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-          <h1 className="text-base font-bold text-slate-800">Task Manager</h1>
-          <nav className="flex gap-1">
-            {TABS.map((tab) => (
+    <div className="min-h-screen bg-slate-50 font-sans">
+      <header className="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-sm shadow-indigo-200">
+              <Layers size={17} className="text-white" />
+            </div>
+            <span className="font-display font-bold text-slate-900 text-[18px] tracking-tight">TaskFlow</span>
+          </div>
+
+          <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+            {TABS.map(({ id, label, icon: Icon }) => (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                key={id}
+                onClick={() => setActiveTab(id)}
                 className={cn(
-                  'px-4 py-1.5 text-sm rounded-lg font-medium transition-colors',
-                  activeTab === tab.id
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
+                  'flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-150',
+                  activeTab === id
+                    ? 'bg-white text-indigo-700 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
                 )}
               >
-                {tab.label}
+                <Icon size={14} />
+                {label}
               </button>
             ))}
           </nav>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-7">
         {activeTab === 'tasks' ? <TaskList /> : <Dashboard />}
       </main>
 
