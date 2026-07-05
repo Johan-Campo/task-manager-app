@@ -110,7 +110,7 @@ export function TaskForm({ onClose }) {
             />
           </Field>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Prioridad" icon={<Flag size={12} />}>
               <select
                 name="prioridad"

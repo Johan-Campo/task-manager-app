@@ -128,14 +128,16 @@ export function KanbanBoard() {
       onDragEnd={handleDragEnd}
       onDragCancel={() => setActiveTask(null)}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        {STATUSES.map((status) => (
-          <KanbanColumn
-            key={status}
-            status={status}
-            tasks={tasks.filter((t) => t.estado === status)}
-          />
-        ))}
+      <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 pb-2">
+        <div className="grid grid-cols-5 gap-3 min-w-[700px]">
+          {STATUSES.map((status) => (
+            <KanbanColumn
+              key={status}
+              status={status}
+              tasks={tasks.filter((t) => t.estado === status)}
+            />
+          ))}
+        </div>
       </div>
 
       <DragOverlay dropAnimation={{ duration: 200, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)' }}>

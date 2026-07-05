@@ -11,7 +11,7 @@ export function TaskFilters() {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+      <span className="hidden sm:flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
         <SlidersHorizontal size={12} />
         Filtrar
       </span>
@@ -19,7 +19,7 @@ export function TaskFilters() {
       <select
         value={filters.status ?? ''}
         onChange={(e) => setFilter('status', e.target.value || null)}
-        className="text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 text-slate-600 cursor-pointer shadow-sm transition-all"
+        className="flex-1 sm:flex-none text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 text-slate-600 cursor-pointer shadow-sm transition-all"
       >
         <option value="">Todos los estados</option>
         {STATUSES.map((s) => (
@@ -30,7 +30,7 @@ export function TaskFilters() {
       <select
         value={filters.priority ?? ''}
         onChange={(e) => setFilter('priority', e.target.value || null)}
-        className="text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 text-slate-600 cursor-pointer shadow-sm transition-all"
+        className="flex-1 sm:flex-none text-xs font-medium border border-slate-200 bg-white rounded-xl px-3 py-1.5 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-50 text-slate-600 cursor-pointer shadow-sm transition-all"
       >
         <option value="">Todas las prioridades</option>
         {PRIORITIES.map((p) => (

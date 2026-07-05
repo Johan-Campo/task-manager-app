@@ -20,11 +20,11 @@ export function TaskList() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <TaskFilters />
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 text-white text-sm font-semibold rounded-xl shadow-md shadow-violet-200 transition-all duration-150 active:scale-[0.97]"
+          className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 text-white text-sm font-semibold rounded-xl shadow-md shadow-violet-200 transition-all duration-150 active:scale-[0.97]"
         >
           <Plus size={16} strokeWidth={2.5} />
           Nueva tarea

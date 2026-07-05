@@ -30,7 +30,7 @@ export default function App() {
                 key={id}
                 onClick={() => setActiveTab(id)}
                 className={cn(
-                  'flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-150',
+                  'flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-150',
                   activeTab === id
                     ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-sm shadow-violet-300'
                     : 'text-slate-500 hover:text-slate-700 hover:bg-white/70'

@@ -26,7 +26,7 @@ export function StatusToast() {
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{ opacity: 0, x: 80, scale: 0.92 }}
           transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl px-4 py-3.5 shadow-2xl border border-white/10 max-w-sm"
+          className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl px-4 py-3.5 shadow-2xl border border-white/10 max-w-[calc(100vw-1.5rem)] sm:max-w-sm"
         >
           <div className="w-8 h-8 bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 rounded-xl flex items-center justify-center shrink-0">
             <CheckCircle2 size={16} className="text-emerald-400" />
