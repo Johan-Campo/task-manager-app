@@ -50,7 +50,7 @@ export function TaskCard({ task }) {
           <h3 className="text-sm font-semibold text-slate-800 leading-snug">{task.nombre}</h3>
           <button
             onClick={() => setConfirmOpen(true)}
-            className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 hover:bg-rose-100/60 p-1.5 rounded-lg transition-all shrink-0 active:scale-90"
+            className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-slate-300 hover:text-rose-500 hover:bg-rose-100/60 p-1.5 rounded-lg transition-all shrink-0 active:scale-90"
           >
             <Trash2 size={13} />
           </button>
