@@ -1,7 +1,12 @@
 import { LayoutGrid, AlertOctagon, Zap, CheckCircle2, AlertTriangle } from 'lucide-react'
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+  PieChart, Pie, Legend,
+} from 'recharts'
 import useTaskStore from '../store/useTaskStore.js'
-import { PRIORITY, STATUS, STATUSES, STATUS_COLORS, PRIORITY_COLORS, STATUS_BAR_COLORS, KANBAN_BORDER_COLORS } from '../types.js'
+import { PRIORITY, STATUS, STATUSES, PRIORITIES } from '../types.js'
 import { cn } from '../lib/cn.js'
+import { KanbanBoard } from './KanbanBoard.jsx'
 
 const STAT_CARDS = [
   {
@@ -30,17 +35,47 @@ const STAT_CARDS = [
   },
 ]
 
+const STATUS_CHART_COLORS = {
+  Prospeccion: '#94a3b8',
+  Propuesta: '#60a5fa',
+  'En desarrollo': '#8b5cf6',
+  QA: '#f97316',
+  Entregado: '#34d399',
+}
+
+const PRIORITY_CHART_COLORS = {
+  Alta: '#f43f5e',
+  Media: '#f59e0b',
+  Baja: '#0ea5e9',
+}
+
+function ChartTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null
+  const val = payload[0].value
+  return (
+    <div className="bg-slate-900 text-white text-xs px-3 py-2 rounded-xl shadow-xl border border-white/10">
+      {label && <p className="font-semibold mb-0.5">{label}</p>}
+      <p className="text-slate-300">{val} tarea{val !== 1 ? 's' : ''}</p>
+    </div>
+  )
+}
+
 export function Dashboard() {
   const tasks = useTaskStore((s) => s.tasks)
-
-  const byStatus = STATUSES.map((s) => ({
-    label: s,
-    count: tasks.filter((t) => t.estado === s).length,
-  }))
 
   const highPriority = tasks.filter(
     (t) => t.prioridad === PRIORITY.ALTA && t.estado !== STATUS.ENTREGADO
   )
+
+  const statusChartData = STATUSES.map((s) => ({
+    name: s,
+    count: tasks.filter((t) => t.estado === s).length,
+  }))
+
+  const priorityChartData = PRIORITIES.map((p) => ({
+    name: p,
+    value: tasks.filter((t) => t.prioridad === p).length,
+  })).filter((d) => d.value > 0)
 
   return (
     <div className="space-y-6">
@@ -86,80 +121,79 @@ export function Dashboard() {
         </div>
       )}
 
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-        <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-5">
-          Distribución por estado
-        </h3>
-        {tasks.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-8">Sin datos aún</p>
-        ) : (
-          <div className="space-y-3.5">
-            {byStatus.map(({ label, count }) => {
-              const pct = tasks.length > 0 ? Math.round((count / tasks.length) * 100) : 0
-              return (
-                <div key={label} className="flex items-center gap-3">
-                  <span className={cn('text-xs font-semibold px-2.5 py-1 rounded-lg w-32 text-center shrink-0', STATUS_COLORS[label])}>
-                    {label}
-                  </span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                    <div
-                      className={cn('h-2.5 rounded-full transition-all duration-700', STATUS_BAR_COLORS[label])}
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                  <span className="text-xs font-semibold text-slate-500 w-20 text-right shrink-0 tabular-nums">
-                    {count} <span className="font-normal text-slate-400">({pct}%)</span>
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-        )}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <div className="lg:col-span-3 bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-5">
+            Distribución por estado
+          </h3>
+          {tasks.length === 0 ? (
+            <p className="text-sm text-slate-400 text-center py-10">Sin datos aún</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={statusChartData} layout="vertical" margin={{ top: 0, right: 30, left: 105, bottom: 0 }}>
+                <XAxis type="number" hide />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={100}
+                  tick={{ fontSize: 11, fontWeight: 600, fill: '#64748b' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(139,92,246,0.05)', radius: 6 }} />
+                <Bar dataKey="count" radius={[0, 6, 6, 0]} maxBarSize={18} animationDuration={900} animationEasing="ease-out">
+                  {statusChartData.map((entry) => (
+                    <Cell key={entry.name} fill={STATUS_CHART_COLORS[entry.name]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+
+        <div className="lg:col-span-2 bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-5">
+            Distribución por prioridad
+          </h3>
+          {tasks.length === 0 ? (
+            <p className="text-sm text-slate-400 text-center py-10">Sin datos aún</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={priorityChartData}
+                  cx="50%"
+                  cy="45%"
+                  innerRadius={52}
+                  outerRadius={78}
+                  paddingAngle={4}
+                  dataKey="value"
+                  animationBegin={0}
+                  animationDuration={900}
+                >
+                  {priorityChartData.map((entry) => (
+                    <Cell key={entry.name} fill={PRIORITY_CHART_COLORS[entry.name]} />
+                  ))}
+                </Pie>
+                <Tooltip content={<ChartTooltip />} />
+                <Legend
+                  iconType="circle"
+                  iconSize={8}
+                  formatter={(value) => (
+                    <span style={{ fontSize: 11, fontWeight: 600, color: '#64748b' }}>{value}</span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </div>
       </div>
 
       <div>
-        <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-4">Tablero Kanban</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {STATUSES.map((status) => {
-            const column = tasks.filter((t) => t.estado === status)
-            return (
-              <div
-                key={status}
-                className={cn(
-                  'bg-white border border-slate-200/80 border-t-2 rounded-2xl p-3 shadow-sm',
-                  KANBAN_BORDER_COLORS[status]
-                )}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-slate-700">{status}</span>
-                  <span className="min-w-5 h-5 px-1.5 bg-slate-100 rounded-full text-[11px] font-bold text-slate-500 flex items-center justify-center">
-                    {column.length}
-                  </span>
-                </div>
-
-                <div className="space-y-2">
-                  {column.length === 0 ? (
-                    <div className="py-5 text-center text-xs text-slate-300 border-2 border-dashed border-slate-100 rounded-xl">
-                      Vacío
-                    </div>
-                  ) : (
-                    column.map((t) => (
-                      <div key={t.id} className="bg-slate-50 hover:bg-violet-50/50 border border-slate-100 rounded-xl p-2.5 transition-colors">
-                        <p className="text-xs font-semibold text-slate-700 leading-snug mb-1.5">{t.nombre}</p>
-                        <div className="flex items-center gap-1.5">
-                          <span className={cn('text-[10px] font-bold px-1.5 py-0.5 rounded-md', PRIORITY_COLORS[t.prioridad])}>
-                            {t.prioridad}
-                          </span>
-                          <span className="text-[11px] text-slate-400 truncate">{t.owner}</span>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-4">
+          Tablero Kanban — arrastra para cambiar estado
+        </h3>
+        <KanbanBoard />
       </div>
     </div>
   )

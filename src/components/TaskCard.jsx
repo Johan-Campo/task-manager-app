@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { User, Calendar, Trash2 } from 'lucide-react'
 import useTaskStore from '../store/useTaskStore.js'
 import { STATUSES, STATUS_COLORS, PRIORITY_COLORS, PRIORITY_BORDER } from '../types.js'
@@ -20,7 +21,7 @@ export function TaskCard({ task }) {
     <>
       <div
         className={cn(
-          'group bg-white rounded-2xl border border-slate-200/80 border-l-4 p-4 flex flex-col gap-3',
+          'group bg-white rounded-2xl border border-slate-200/80 border-l-4 p-4 flex flex-col gap-3 h-full',
           'shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200',
           PRIORITY_BORDER[task.prioridad]
         )}
@@ -29,7 +30,7 @@ export function TaskCard({ task }) {
           <h3 className="text-sm font-semibold text-slate-800 leading-snug">{task.nombre}</h3>
           <button
             onClick={() => setConfirmOpen(true)}
-            className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-all shrink-0"
+            className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-all shrink-0 active:scale-90"
           >
             <Trash2 size={13} />
           </button>
@@ -73,13 +74,15 @@ export function TaskCard({ task }) {
         </div>
       </div>
 
-      {confirmOpen && (
-        <ConfirmDialog
-          taskName={task.nombre}
-          onConfirm={() => { deleteTask(task.id); setConfirmOpen(false) }}
-          onCancel={() => setConfirmOpen(false)}
-        />
-      )}
+      <AnimatePresence>
+        {confirmOpen && (
+          <ConfirmDialog
+            taskName={task.nombre}
+            onConfirm={() => { deleteTask(task.id); setConfirmOpen(false) }}
+            onCancel={() => setConfirmOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   )
 }

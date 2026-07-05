@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { X, User, Tag, Flag, AlignLeft, CheckCircle } from 'lucide-react'
 import useTaskStore from '../store/useTaskStore.js'
 import { PRIORITIES, STATUSES } from '../types.js'
@@ -11,6 +12,8 @@ const EMPTY_FORM = {
   estado: 'Prospeccion',
   descripcion: '',
 }
+
+const spring = { duration: 0.22, ease: [0.16, 1, 0.3, 1] }
 
 export function TaskForm({ onClose }) {
   const addTask = useTaskStore((s) => s.addTask)
@@ -46,11 +49,21 @@ export function TaskForm({ onClose }) {
   }
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
       className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
       onKeyDown={(e) => e.key === 'Escape' && onClose()}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-slate-100 overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.94, y: 14 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.94, y: 14 }}
+        transition={spring}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-slate-100 overflow-hidden"
+      >
         <div className="h-1 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500" />
 
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100">
@@ -60,7 +73,7 @@ export function TaskForm({ onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors"
+            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors active:scale-95"
           >
             <X size={16} />
           </button>
@@ -136,21 +149,21 @@ export function TaskForm({ onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all active:scale-95"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white text-sm font-semibold rounded-xl shadow-sm shadow-violet-200 transition-all"
+              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white text-sm font-semibold rounded-xl shadow-sm shadow-violet-200 transition-all active:scale-[0.97]"
             >
               <CheckCircle size={14} />
               Crear tarea
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -162,7 +175,15 @@ function Field({ label, icon, error, children }) {
         {label}
       </label>
       {children}
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && (
+        <motion.p
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-xs text-red-500"
+        >
+          {error}
+        </motion.p>
+      )}
     </div>
   )
 }
