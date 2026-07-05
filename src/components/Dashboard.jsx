@@ -1,4 +1,4 @@
-import { LayoutGrid, AlertOctagon, Zap, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { LayoutGrid, AlertOctagon, Zap, CheckCircle2, AlertTriangle, ArrowUp } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Legend,
@@ -9,36 +9,84 @@ import { PRIORITY, STATUS, STATUSES, PRIORITIES, STATUS_DOT_COLORS, PRIORITY_CHA
 import { cn } from '../lib/cn.js'
 import { KanbanBoard } from './KanbanBoard.jsx'
 
-const STAT_CARDS = [
-  {
-    label: 'Total tareas',
-    icon: LayoutGrid,
-    gradient: 'from-violet-500 to-purple-600',
-    getValue: (t) => t.length,
-  },
-  {
-    label: 'Prioridad Alta',
-    icon: AlertOctagon,
-    gradient: 'from-rose-500 to-red-600',
-    getValue: (t) => t.filter((x) => x.prioridad === PRIORITY.ALTA).length,
-  },
-  {
-    label: 'En progreso',
-    icon: Zap,
-    gradient: 'from-amber-400 to-orange-500',
-    getValue: (t) => t.filter((x) => [STATUS.EN_DESARROLLO, STATUS.QA].includes(x.estado)).length,
-  },
-  {
-    label: 'Entregadas',
-    icon: CheckCircle2,
-    gradient: 'from-emerald-400 to-teal-500',
-    getValue: (t) => t.filter((x) => x.estado === STATUS.ENTREGADO).length,
-  },
-]
-
 const CHART_TOKENS = {
   text: 'var(--color-slate-500)',
   cursorFill: 'rgba(139,92,246,0.05)',
+}
+
+const CARD_THEME = {
+  violet:  { bg: 'bg-white',       border: 'border-slate-100',   iconBg: 'bg-violet-100', iconText: 'text-violet-600', color: 'var(--color-violet-500)' },
+  rose:    { bg: 'bg-rose-50',     border: 'border-rose-100',    iconBg: 'bg-rose-100',   iconText: 'text-rose-500',   color: 'var(--color-rose-500)'   },
+  amber:   { bg: 'bg-amber-50',    border: 'border-amber-100',   iconBg: 'bg-amber-100',  iconText: 'text-amber-500',  color: 'var(--color-amber-500)'  },
+  emerald: { bg: 'bg-emerald-50',  border: 'border-emerald-100', iconBg: 'bg-emerald-100',iconText: 'text-emerald-600',color: 'var(--color-emerald-500)'},
+}
+
+function ProgressRing({ pct, colorVar, size = 52 }) {
+  const sw = 3.5
+  const r = (size - sw * 2) / 2
+  const circ = 2 * Math.PI * r
+  const offset = circ - (pct / 100) * circ
+  return (
+    <div className="relative flex items-center justify-center shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="absolute -rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={colorVar} strokeWidth={sw} opacity={0.15} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={colorVar} strokeWidth={sw}
+          strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
+      </svg>
+      <span className="text-[11px] font-bold tabular-nums" style={{ color: colorVar }}>{pct}%</span>
+    </div>
+  )
+}
+
+function TrendChip({ delta }) {
+  if (!delta) return null
+  return (
+    <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full border border-emerald-100">
+      <ArrowUp size={10} strokeWidth={2.5} />
+      +{delta} esta semana
+    </span>
+  )
+}
+
+function StatCard({ themeName, icon: Icon, label, value, ring, breakdown, trend }) {
+  const t = CARD_THEME[themeName]
+  return (
+    <div className={cn('rounded-2xl border p-5 shadow-sm hover:shadow-md transition-all duration-200', t.bg, t.border)}>
+      <div className="flex items-start gap-1.5 mb-3">
+        <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center shrink-0', t.iconBg)}>
+          <Icon size={13} className={t.iconText} />
+        </div>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 pt-0.5 leading-tight">{label}</p>
+      </div>
+
+      {ring ? (
+        <div className="flex items-center gap-3">
+          <ProgressRing pct={ring} colorVar={t.color} />
+          <div>
+            <p className="text-3xl font-bold text-slate-900 tabular-nums leading-none">{value}</p>
+            {trend !== undefined && <TrendChip delta={trend} />}
+          </div>
+        </div>
+      ) : breakdown ? (
+        <div className="flex items-end justify-between gap-2">
+          <p className="text-3xl font-bold text-slate-900 tabular-nums leading-none">{value}</p>
+          <div className="space-y-1 pb-0.5">
+            {breakdown.map((b) => (
+              <div key={b.label} className="flex items-center justify-between gap-5">
+                <span className="text-[11px] text-slate-400">{b.label}</span>
+                <span className="text-[11px] font-bold text-slate-700">{b.count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <p className="text-3xl font-bold text-slate-900 tabular-nums leading-none mb-2">{value}</p>
+          {trend !== undefined && <TrendChip delta={trend} />}
+        </div>
+      )}
+    </div>
+  )
 }
 
 function ChartTooltip({ active, payload, label }) {
@@ -54,6 +102,21 @@ function ChartTooltip({ active, payload, label }) {
 
 export function Dashboard() {
   const tasks = useTaskStore((s) => s.tasks)
+  const total = tasks.length
+
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const recentTotal = tasks.filter((t) => new Date(t.fechaActualizacion) >= weekAgo).length
+  const recentDelivered = tasks.filter((t) => t.estado === STATUS.ENTREGADO && new Date(t.fechaActualizacion) >= weekAgo).length
+
+  const altaCount = tasks.filter((t) => t.prioridad === PRIORITY.ALTA).length
+  const altaPct = total > 0 ? Math.round((altaCount / total) * 100) : 0
+
+  const enDesarrolloCount = tasks.filter((t) => t.estado === STATUS.EN_DESARROLLO).length
+  const qaCount = tasks.filter((t) => t.estado === STATUS.QA).length
+  const progresoCount = enDesarrolloCount + qaCount
+
+  const entregadasCount = tasks.filter((t) => t.estado === STATUS.ENTREGADO).length
+  const entregadasPct = total > 0 ? Math.round((entregadasCount / total) * 100) : 0
 
   const highPriority = tasks.filter(
     (t) => t.prioridad === PRIORITY.ALTA && t.estado !== STATUS.ENTREGADO
@@ -74,25 +137,38 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {STAT_CARDS.map(({ label, icon: Icon, gradient, getValue }) => (
-          <div
-            key={label}
-            className={cn(
-              'bg-gradient-to-br rounded-2xl p-5 text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200',
-              gradient
-            )}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[11px] font-semibold text-white/70 uppercase tracking-wider">{label}</p>
-                <p className="text-3xl font-display font-bold text-white mt-1 tabular-nums">{getValue(tasks)}</p>
-              </div>
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-                <Icon size={18} className="text-white" />
-              </div>
-            </div>
-          </div>
-        ))}
+        <StatCard
+          themeName="violet"
+          icon={LayoutGrid}
+          label="Total Tareas"
+          value={total}
+          trend={recentTotal}
+        />
+        <StatCard
+          themeName="rose"
+          icon={AlertOctagon}
+          label="Prioridad Alta"
+          value={altaCount}
+          ring={altaPct}
+        />
+        <StatCard
+          themeName="amber"
+          icon={Zap}
+          label="En Progreso"
+          value={progresoCount}
+          breakdown={[
+            { label: 'Desarrollo', count: enDesarrolloCount },
+            { label: 'QA', count: qaCount },
+          ]}
+        />
+        <StatCard
+          themeName="emerald"
+          icon={CheckCircle2}
+          label="Entregadas"
+          value={entregadasCount}
+          ring={entregadasPct}
+          trend={recentDelivered}
+        />
       </div>
 
       {highPriority.length > 0 && (

@@ -15,7 +15,7 @@ Aplicación web para gestionar las tareas internas de un proyecto de software, d
 | @dnd-kit/core | 6 | Drag-and-drop en el tablero Kanban |
 | lucide-react | — | Íconos |
 
-JavaScript puro (sin TypeScript). Persistencia exclusivamente en LocalStorage, sin backend.
+El proyecto fue desarrollado en JavaScript (sin TypeScript) y utiliza LocalStorage como único mecanismo de persistencia, sin backend.
 
 ## Instrucciones para ejecutar
 
@@ -38,13 +38,23 @@ Todos los requisitos funcionales fueron implementados:
 6. **Vista gerencial** — Dashboard con tarjetas de resumen (total, prioridad alta, en progreso, entregadas), gráfica de barras por estado, gráfica de dona por prioridad, alerta de tareas de alta prioridad pendientes, y tablero Kanban completo
 7. **UX** — animaciones sutiles, diseño responsive (móvil y escritorio), confirmación antes de eliminar, datos de prueba precargados
 
+## Arquitectura
+
+El proyecto sigue una estructura modular basada en componentes reutilizables.
+
+- `components/`: componentes reutilizables de la interfaz.
+- `pages/`: vistas principales.
+- `store/`: estado global con Zustand.
+- `utils/`: funciones auxiliares.
+- Persistencia mediante LocalStorage.
+
 ## Uso de inteligencia artificial
 
-Durante el desarrollo de esta prueba utilicé Trae como entorno de desarrollo con Claude Code (Anthropic) como asistente de programación. Lo empleé como una herramienta para potenciar mi productividad, acelerar tareas repetitivas, explorar alternativas de implementación y agilizar el proceso de desarrollo
+Durante el desarrollo de esta prueba utilicé Trae como entorno de desarrollo con Claude Code (Anthropic) como asistente de programación. La IA fue utilizada como una herramienta de apoyo para acelerar tareas repetitivas, explorar alternativas de implementación, resolver dudas puntuales y aumentar la productividad durante el desarrollo. Todas las decisiones de diseño y la integración final del proyecto fueron revisadas y validadas por mí mismo.
 
 **Qué hizo la IA:**
 - Generó la estructura base del proyecto (scaffolding con Vite + Zustand + Tailwind 4)
-- Implementó los componentes React: `TaskCard`, `TaskForm`, `TaskFilters`, `KanbanBoard`, `Dashboard`, `StatusToast`, `ConfirmDialog`, `StatusMenu`
+- Asistió en la implementación de los componentes React: `TaskCard`, `TaskForm`, `TaskFilters`, `KanbanBoard`, `Dashboard`, `StatusToast`, `ConfirmDialog`, `StatusMenu`
 - Propuso y codificó el sistema de diseño (paleta de colores, gradientes, tipografía)
 - Implementó las animaciones con framer-motion y la integración de recharts
 - Aplicó el diseño responsive y corrigió bugs de comportamiento en móvil (DnD vs scroll)
@@ -52,7 +62,7 @@ Durante el desarrollo de esta prueba utilicé Trae como entorno de desarrollo co
 
 ## Desafíos enfrentados
 
-- **Tailwind CSS 4**: configuración completamente diferente a v3 — sin `tailwind.config.js`, tokens personalizados vía `@theme {}` en CSS, plugin de Vite en lugar de PostCSS. Curva de aprendizaje real.
+- **Tailwind CSS 4**: configuración completamente diferente a v3 — sin `tailwind.config.js`, tokens personalizados vía `@theme {}` en CSS, plugin de Vite en lugar de PostCSS. lo que implicó una curva de aprendizaje durante el desarrollo.
 - **DnD en móvil**: `PointerSensor` capturaba el touch a los 5px y bloqueaba el scroll horizontal del Kanban. La solución fue separar `MouseSensor` y `TouchSensor` con `delay: 250ms`, para que un toque rápido haga scroll y un press sostenido inicie el drag.
 - **Botón eliminar en táctil**: el patrón `opacity-0 group-hover:opacity-100` no funciona en dispositivos táctiles (no hay hover). Se resolvió con `opacity-100 sm:opacity-0 sm:group-hover:opacity-100`.
 - **Git tracking**: `node_modules` y carpetas de tooling fueron rastreadas antes de agregar las entradas al `.gitignore` y debieron removerse explícitamente con `git rm --cached`.
