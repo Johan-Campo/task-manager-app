@@ -9,10 +9,13 @@ const useTaskStore = create(
     (set) => ({
       tasks: [],
       filters: { status: null, priority: null },
-      lastStatusChange: null,
+      lastToast: null,
 
       addTask: (task) =>
-        set((state) => ({ tasks: [...state.tasks, task] })),
+        set((state) => ({
+          tasks: [...state.tasks, task],
+          lastToast: { type: 'added', taskName: task.nombre, ts: Date.now() },
+        })),
 
       updateStatus: (id, newStatus) =>
         set((state) => {
@@ -24,21 +27,29 @@ const useTaskStore = create(
                 ? { ...t, estado: newStatus, fechaActualizacion: new Date().toISOString() }
                 : t
             ),
-            lastStatusChange: {
+            lastToast: {
+              type: 'status',
               taskName: task.nombre,
               previousStatus: task.estado,
               newStatus,
+              ts: Date.now(),
             },
           }
         }),
 
       deleteTask: (id) =>
-        set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) })),
+        set((state) => {
+          const task = state.tasks.find((t) => t.id === id)
+          return {
+            tasks: state.tasks.filter((t) => t.id !== id),
+            lastToast: { type: 'deleted', taskName: task?.nombre ?? '', ts: Date.now() },
+          }
+        }),
 
       setFilter: (type, value) =>
         set((state) => ({ filters: { ...state.filters, [type]: value } })),
 
-      clearLastStatusChange: () => set({ lastStatusChange: null }),
+      clearLastToast: () => set({ lastToast: null }),
     }),
     {
       name: 'task-manager-storage',
