@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { User, Calendar, Trash2 } from 'lucide-react'
 import useTaskStore from '../store/useTaskStore.js'
-import { STATUSES, STATUS_COLORS, PRIORITY_COLORS } from '../types.js'
+import { PRIORITY_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
 import { ConfirmDialog } from './ConfirmDialog.jsx'
+import { StatusMenu } from './StatusMenu.jsx'
 
 const PRIORITY_STYLES = {
   Alta: {
@@ -75,18 +76,7 @@ export function TaskCard({ task }) {
           <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
             Estado
           </label>
-          <select
-            value={task.estado}
-            onChange={(e) => updateStatus(task.id, e.target.value)}
-            className={cn(
-              'w-full text-xs font-semibold rounded-xl px-2.5 py-1.5 border-0 outline-none cursor-pointer transition-colors',
-              STATUS_COLORS[task.estado]
-            )}
-          >
-            {STATUSES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+          <StatusMenu value={task.estado} onChange={(s) => updateStatus(task.id, s)} />
         </div>
 
         <div className="flex items-center gap-1 text-[11px] text-slate-400">

@@ -9,8 +9,9 @@ import {
   useDroppable,
   useDraggable,
 } from '@dnd-kit/core'
+import { GripVertical } from 'lucide-react'
 import useTaskStore from '../store/useTaskStore.js'
-import { STATUSES, PRIORITY_COLORS, KANBAN_BORDER_COLORS } from '../types.js'
+import { STATUSES, PRIORITY_COLORS, PRIORITY_BORDER, KANBAN_BORDER_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
 
 function KanbanCard({ task }) {
@@ -26,21 +27,31 @@ function KanbanCard({ task }) {
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
-      {...attributes}
       className={cn(
-        'border rounded-xl p-2.5 select-none transition-all duration-150',
+        'border border-l-[3px] rounded-xl select-none transition-all duration-150',
+        PRIORITY_BORDER[task.prioridad],
         isDragging
           ? 'opacity-25 shadow-none bg-slate-50 border-slate-100 cursor-grabbing'
-          : 'bg-slate-50 hover:bg-violet-50/60 border-slate-100 hover:border-violet-100 cursor-grab'
+          : 'bg-slate-50 hover:bg-violet-50/60 border-slate-100 hover:border-violet-100'
       )}
     >
-      <p className="text-xs font-semibold text-slate-700 leading-snug mb-1.5">{task.nombre}</p>
-      <div className="flex items-center gap-1.5">
-        <span className={cn('text-[10px] font-bold px-1.5 py-0.5 rounded-md', PRIORITY_COLORS[task.prioridad])}>
-          {task.prioridad}
-        </span>
-        <span className="text-[11px] text-slate-400 truncate">{task.owner}</span>
+      <div className="flex items-start gap-1.5 p-2.5">
+        <button
+          {...listeners}
+          {...attributes}
+          className="mt-0.5 text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing shrink-0 touch-none"
+        >
+          <GripVertical size={13} />
+        </button>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold text-slate-700 leading-snug mb-1.5">{task.nombre}</p>
+          <div className="flex items-center gap-1.5">
+            <span className={cn('text-[10px] font-bold px-1.5 py-0.5 rounded-md', PRIORITY_COLORS[task.prioridad])}>
+              {task.prioridad}
+            </span>
+            <span className="text-[11px] text-slate-400 truncate">{task.owner}</span>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -48,20 +59,26 @@ function KanbanCard({ task }) {
 
 function KanbanCardOverlay({ task }) {
   return (
-    <div className="bg-white border border-violet-300 rounded-xl p-2.5 shadow-2xl shadow-violet-100 rotate-1 cursor-grabbing scale-105">
-      <p className="text-xs font-semibold text-slate-700 leading-snug mb-1.5">{task.nombre}</p>
-      <div className="flex items-center gap-1.5">
-        <span className={cn('text-[10px] font-bold px-1.5 py-0.5 rounded-md', PRIORITY_COLORS[task.prioridad])}>
-          {task.prioridad}
-        </span>
-        <span className="text-[11px] text-slate-400 truncate">{task.owner}</span>
+    <div className={cn('bg-white border border-l-[3px] rounded-xl shadow-2xl shadow-violet-100 rotate-1 cursor-grabbing scale-105', PRIORITY_BORDER[task.prioridad])}>
+      <div className="flex items-start gap-1.5 p-2.5">
+        <GripVertical size={13} className="mt-0.5 text-slate-300 shrink-0" />
+        <div className="min-w-0">
+          <p className="text-xs font-semibold text-slate-700 leading-snug mb-1.5">{task.nombre}</p>
+          <div className="flex items-center gap-1.5">
+            <span className={cn('text-[10px] font-bold px-1.5 py-0.5 rounded-md', PRIORITY_COLORS[task.prioridad])}>
+              {task.prioridad}
+            </span>
+            <span className="text-[11px] text-slate-400 truncate">{task.owner}</span>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-function KanbanColumn({ status, tasks }) {
+function KanbanColumn({ status, tasks, total }) {
   const { setNodeRef, isOver } = useDroppable({ id: status })
+  const pct = total > 0 ? Math.round((tasks.length / total) * 100) : 0
 
   return (
     <div
@@ -72,11 +89,18 @@ function KanbanColumn({ status, tasks }) {
         isOver ? 'bg-violet-50/50 border-violet-200 shadow-md' : 'bg-white border-slate-200/80'
       )}
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
         <span className="text-xs font-bold text-slate-700">{status}</span>
         <span className="min-w-5 h-5 px-1.5 bg-slate-100 rounded-full text-[11px] font-bold text-slate-500 flex items-center justify-center">
           {tasks.length}
         </span>
+      </div>
+
+      <div className="h-[3px] rounded-full bg-slate-100 mb-3 overflow-hidden">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-600 transition-all duration-300"
+          style={{ width: `${pct}%` }}
+        />
       </div>
 
       <div className="space-y-2">
@@ -92,7 +116,12 @@ function KanbanColumn({ status, tasks }) {
             {isOver ? 'Suelta aquí' : 'Vacío'}
           </div>
         ) : (
-          tasks.map((task) => <KanbanCard key={task.id} task={task} />)
+          <>
+            {tasks.map((task) => <KanbanCard key={task.id} task={task} />)}
+            {isOver && (
+              <div className="border-2 border-dashed border-violet-300 bg-violet-50/60 rounded-xl min-h-[52px]" />
+            )}
+          </>
         )}
       </div>
     </div>
@@ -137,6 +166,7 @@ export function KanbanBoard() {
               key={status}
               status={status}
               tasks={tasks.filter((t) => t.estado === status)}
+              total={tasks.length}
             />
           ))}
         </div>

@@ -58,3 +58,11 @@ export const STATUS_BAR_COLORS = {
   [STATUS.QA]: 'bg-gradient-to-r from-orange-400 to-orange-500',
   [STATUS.ENTREGADO]: 'bg-gradient-to-r from-emerald-400 to-emerald-600',
 }
+
+export const STATUS_DOT_COLORS = {
+  [STATUS.PROSPECCION]: '#94a3b8',
+  [STATUS.PROPUESTA]: '#60a5fa',
+  [STATUS.EN_DESARROLLO]: '#8b5cf6',
+  [STATUS.QA]: '#f97316',
+  [STATUS.ENTREGADO]: '#34d399',
+}
