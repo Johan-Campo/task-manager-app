@@ -2,6 +2,13 @@
 
 **Demo en producción:** [https://task-manager-app-five-omega.vercel.app](https://task-manager-app-five-omega.vercel.app)
 
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=flat&logo=vite&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-5-433E38?style=flat)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Vercel](https://img.shields.io/badge/Vercel-deployed-000000?style=flat&logo=vercel&logoColor=white)
+
 Aplicación web para gestionar las tareas internas de un proyecto de software, desde la búsqueda del cliente hasta la entrega final.
 
 ## Tecnologías utilizadas
