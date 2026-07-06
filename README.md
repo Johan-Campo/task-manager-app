@@ -21,12 +21,30 @@ El proyecto fue desarrollado en JavaScript (sin TypeScript) y utiliza LocalStora
 
 ## Instrucciones para ejecutar
 
+**Requisitos:** Node.js 18+ y npm instalados.
+
+1. Clona el repositorio e ingresa al directorio:
+
+```bash
+git clone https://github.com/Johan-Campo/task-manager-app.git
+cd task-manager-app
+```
+
+2. Instala las dependencias:
+
 ```bash
 npm install
+```
+
+3. Inicia el servidor de desarrollo:
+
+```bash
 npm run dev
 ```
 
-Abrir [http://localhost:5173](http://localhost:5173). La aplicación carga con datos de prueba en el primer arranque.
+4. Abre [http://localhost:5173](http://localhost:5173) en el navegador.
+
+La aplicación carga automáticamente con datos de prueba en el primer arranque. No requiere configuración adicional ni variables de entorno.
 
 ## Funcionalidades completadas
 
