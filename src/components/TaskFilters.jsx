@@ -1,6 +1,8 @@
 import { SlidersHorizontal, X } from 'lucide-react'
 
-import useTaskStore, { useShallow } from '../store/useTaskStore.js'
+import { useShallow } from 'zustand/react/shallow'
+
+import { useTaskStore } from '../store/useTaskStore.js'
 import { PRIORITIES, STATUSES } from '../types.js'
 
 export function TaskFilters() {

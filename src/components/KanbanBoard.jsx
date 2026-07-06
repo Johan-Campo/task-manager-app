@@ -10,8 +10,9 @@ import {
   useDraggable,
 } from '@dnd-kit/core'
 import { GripVertical } from 'lucide-react'
+import { useShallow } from 'zustand/react/shallow'
 
-import useTaskStore from '../store/useTaskStore.js'
+import { useTaskStore } from '../store/useTaskStore.js'
 import { STATUSES, PRIORITY_COLORS, PRIORITY_BORDER, KANBAN_BORDER_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
 
@@ -122,8 +123,9 @@ function KanbanColumn({ status, tasks }) {
 }
 
 export function KanbanBoard() {
-  const tasks = useTaskStore((s) => s.tasks)
-  const updateStatus = useTaskStore((s) => s.updateStatus)
+  const { tasks, updateStatus } = useTaskStore(
+    useShallow((s) => ({ tasks: s.tasks, updateStatus: s.updateStatus }))
+  )
   const [activeTask, setActiveTask] = useState(null)
 
   const sensors = useSensors(

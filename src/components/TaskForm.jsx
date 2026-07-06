@@ -1,22 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { X, User, Tag, Flag, AlignLeft, CheckCircle } from 'lucide-react'
 
-import useTaskStore from '../store/useTaskStore.js'
-import { PRIORITIES, STATUSES } from '../types.js'
+import { useTaskStore } from '../store/useTaskStore.js'
+import { PRIORITY, STATUS, PRIORITIES, STATUSES } from '../types.js'
 import { cn } from '../lib/cn.js'
 
 const EMPTY_FORM = {
   nombre: '',
   owner: '',
-  prioridad: 'Alta',
-  estado: 'Prospeccion',
+  prioridad: PRIORITY.ALTA,
+  estado: STATUS.PROSPECCION,
   descripcion: '',
 }
 
 const spring = { duration: 0.22, ease: [0.16, 1, 0.3, 1] }
 
 export function TaskForm({ onClose }) {
+  const onCloseRef = useRef(onClose)
+  useEffect(() => { onCloseRef.current = onClose })
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') onCloseRef.current()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   const addTask = useTaskStore((s) => s.addTask)
   const [form, setForm] = useState(EMPTY_FORM)
   const [errors, setErrors] = useState({})
@@ -56,7 +66,6 @@ export function TaskForm({ onClose }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15 }}
       className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-      onKeyDown={(e) => e.key === 'Escape' && onClose()}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.94, y: 14 }}

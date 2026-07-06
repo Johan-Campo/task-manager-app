@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { User, Calendar, Trash2 } from 'lucide-react'
 
-import useTaskStore from '../store/useTaskStore.js'
+import { useTaskStore } from '../store/useTaskStore.js'
+import { useShallow } from 'zustand/react/shallow'
 import { PRIORITY_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
 import { ConfirmDialog } from './ConfirmDialog.jsx'
@@ -28,8 +29,9 @@ const PRIORITY_STYLES = {
 
 export function TaskCard({ task }) {
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const updateStatus = useTaskStore((s) => s.updateStatus)
-  const deleteTask = useTaskStore((s) => s.deleteTask)
+  const { updateStatus, deleteTask } = useTaskStore(
+    useShallow((s) => ({ updateStatus: s.updateStatus, deleteTask: s.deleteTask }))
+  )
   const styles = PRIORITY_STYLES[task.prioridad]
 
   const formattedDate = new Date(task.fechaActualizacion).toLocaleDateString('es-CO', {

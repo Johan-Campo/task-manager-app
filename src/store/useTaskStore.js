@@ -1,13 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { useShallow } from 'zustand/react/shallow'
 
 import { seedTasks } from '../data/seedTasks.js'
 
 const useTaskStore = create(
   persist(
     (set) => ({
-      tasks: [],
+      tasks: seedTasks,
       filters: { status: null, priority: null },
       lastToast: null,
 
@@ -40,9 +39,10 @@ const useTaskStore = create(
       deleteTask: (id) =>
         set((state) => {
           const task = state.tasks.find((t) => t.id === id)
+          if (!task) return state
           return {
             tasks: state.tasks.filter((t) => t.id !== id),
-            lastToast: { type: 'deleted', taskName: task?.nombre ?? '', ts: Date.now() },
+            lastToast: { type: 'deleted', taskName: task.nombre, ts: Date.now() },
           }
         }),
 
@@ -53,14 +53,9 @@ const useTaskStore = create(
     }),
     {
       name: 'task-manager-storage',
-      onRehydrateStorage: () => (state) => {
-        if (state && state.tasks.length === 0) {
-          state.tasks = seedTasks
-        }
-      },
+      partialize: (state) => ({ tasks: state.tasks }),
     }
   )
 )
 
-export { useShallow }
-export default useTaskStore
+export { useTaskStore }

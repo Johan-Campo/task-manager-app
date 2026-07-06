@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Inbox } from 'lucide-react'
 
-import useTaskStore, { useShallow } from '../store/useTaskStore.js'
+import { useShallow } from 'zustand/react/shallow'
+
+import { useTaskStore } from '../store/useTaskStore.js'
 import { TaskCard } from './TaskCard.jsx'
 import { TaskFilters } from './TaskFilters.jsx'
 import { TaskForm } from './TaskForm.jsx'
@@ -69,7 +71,7 @@ export function TaskList() {
                   initial={{ opacity: 0, y: 10, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.93 }}
-                  transition={{ duration: 0.18, delay: i * 0.025, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.18, delay: Math.min(i * 0.025, 0.3), ease: [0.16, 1, 0.3, 1] }}
                 >
                   <TaskCard task={task} />
                 </motion.div>

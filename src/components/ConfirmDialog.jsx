@@ -1,9 +1,20 @@
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { AlertTriangle } from 'lucide-react'
 
 const spring = { duration: 0.22, ease: [0.16, 1, 0.3, 1] }
 
 export function ConfirmDialog({ taskName, onConfirm, onCancel }) {
+  const onCancelRef = useRef(onCancel)
+  useEffect(() => { onCancelRef.current = onCancel })
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') onCancelRef.current()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -11,7 +22,6 @@ export function ConfirmDialog({ taskName, onConfirm, onCancel }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15 }}
       className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-      onKeyDown={(e) => e.key === 'Escape' && onCancel()}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.92, y: 16 }}

@@ -1,10 +1,10 @@
 import { LayoutGrid, AlertOctagon, Zap, CheckCircle2, AlertTriangle, ArrowUp } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Legend,
+  PieChart, Pie, Cell, Legend,
 } from 'recharts'
 
-import useTaskStore from '../store/useTaskStore.js'
+import { useTaskStore } from '../store/useTaskStore.js'
 import { PRIORITY, STATUS, STATUSES, PRIORITIES, STATUS_DOT_COLORS, PRIORITY_CHART_COLORS } from '../types.js'
 import { cn } from '../lib/cn.js'
 import { KanbanBoard } from './KanbanBoard.jsx'
@@ -211,7 +211,11 @@ export function Dashboard() {
                   tickLine={false}
                 />
                 <Tooltip content={<ChartTooltip />} cursor={{ fill: CHART_TOKENS.cursorFill, radius: 6 }} />
-                <Bar dataKey="count" radius={[0, 6, 6, 0]} maxBarSize={18} animationDuration={900} animationEasing="ease-out" />
+                <Bar dataKey="count" radius={[0, 6, 6, 0]} maxBarSize={18} animationDuration={900} animationEasing="ease-out">
+                  {statusChartData.map((entry) => (
+                    <Cell key={entry.name} fill={entry.fill} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -236,7 +240,11 @@ export function Dashboard() {
                   dataKey="value"
                   animationBegin={0}
                   animationDuration={900}
-                />
+                >
+                  {priorityChartData.map((entry) => (
+                    <Cell key={entry.name} fill={entry.fill} />
+                  ))}
+                </Pie>
                 <Tooltip content={<ChartTooltip />} />
                 <Legend
                   iconType="circle"

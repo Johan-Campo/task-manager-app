@@ -2,7 +2,9 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, X, ArrowRight, PlusCircle, Trash2 } from 'lucide-react'
 
-import useTaskStore, { useShallow } from '../store/useTaskStore.js'
+import { useShallow } from 'zustand/react/shallow'
+
+import { useTaskStore } from '../store/useTaskStore.js'
 
 const VARIANTS = {
   added: {
@@ -27,10 +29,7 @@ const VARIANTS = {
 
 export function StatusToast() {
   const { lastToast, clearLastToast } = useTaskStore(
-    useShallow((s) => ({
-      lastToast: s.lastToast,
-      clearLastToast: s.clearLastToast,
-    }))
+    useShallow((s) => ({ lastToast: s.lastToast, clearLastToast: s.clearLastToast }))
   )
 
   useEffect(() => {
