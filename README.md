@@ -60,13 +60,13 @@ Todos los requisitos funcionales fueron implementados:
 
 ## Arquitectura
 
-El proyecto sigue una estructura modular basada en componentes reutilizables.
+El proyecto sigue una estructura modular basada en componentes reutilizables:
 
-- `components/`: componentes reutilizables de la interfaz.
-- `pages/`: vistas principales.
-- `store/`: estado global con Zustand.
-- `utils/`: funciones auxiliares.
-- Persistencia mediante LocalStorage.
+- `src/components/`: componentes de interfaz (`TaskList`, `TaskCard`, `TaskForm`, `KanbanBoard`, `Dashboard`, `StatusToast`, etc.)
+- `src/store/`: estado global con Zustand + persistencia en LocalStorage
+- `src/data/`: datos de prueba iniciales (`seedTasks`)
+- `src/lib/`: utilidades compartidas (`cn` para clases de Tailwind)
+- `src/App.jsx`: raíz de la aplicación con la navegación entre vistas
 
 ## Uso de inteligencia artificial
 
